@@ -44,7 +44,7 @@ else()
     # build mconvert only on unix / OS-X
     if(NOT WIN32)
       add_executable(mconvert mconvert.cpp)
-      target_link_libraries(mconvert pmp)
+      target_link_libraries(mconvert pmp openrex)
     endif()
 
     if(OpenGL_FOUND)

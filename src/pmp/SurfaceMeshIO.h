@@ -25,6 +25,7 @@ public:
 
 private:
     bool read_off(SurfaceMesh& mesh);
+    bool read_rex(SurfaceMesh& mesh);
     bool read_obj(SurfaceMesh& mesh);
     bool read_stl(SurfaceMesh& mesh);
     bool read_ply(SurfaceMesh& mesh);

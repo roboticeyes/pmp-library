@@ -3,6 +3,7 @@
 // Distributed under a MIT-style license, see LICENSE.txt for details.
 
 #include "pmp/SurfaceMeshIO.h"
+#include "rex.h"
 
 #include <clocale>
 #include <cstring>
@@ -53,6 +54,10 @@ bool SurfaceMeshIO::read(SurfaceMesh& mesh)
     else if (ext == "obj")
     {
         return read_obj(mesh);
+    }
+    else if (ext == "rex")
+    {
+        return read_rex(mesh);
     }
     else if (ext == "stl")
     {
@@ -278,6 +283,55 @@ bool SurfaceMeshIO::read_obj(SurfaceMesh& mesh)
     }
 
     fclose(in);
+    return true;
+}
+
+bool SurfaceMeshIO::read_rex(SurfaceMesh& mesh)
+{
+    long sz;
+    uint8_t *buf = read_file_binary (filename_.c_str(), &sz);
+    if (buf == NULL)
+        return false;
+
+    struct rex_header header;
+    uint8_t *ptr = rex_header_read (buf, &header);
+    if (ptr == NULL)
+        return false;
+
+    for (int i = 0; i < header.nr_datablocks; i++)
+    {
+        struct rex_block block;
+        ptr = rex_block_read (ptr, &block);
+
+        if (block.type == Mesh)
+        {
+            struct rex_mesh *m= (rex_mesh*)block.data;
+            if (!m)
+                continue;
+
+            if (m->positions)
+            {
+                float *p = m->positions;
+                for (unsigned int i = 0; i < m->nr_vertices * 3; i += 3)
+                    mesh.add_vertex(Point(p[i], p[i+1], p[i+2]));
+            }
+            if (m->triangles)
+            {
+                uint32_t *t = m->triangles;
+                for (unsigned int i = 0; i < m->nr_triangles * 3; i += 3)
+                {
+                    std::vector<Vertex> vertices;
+                    vertices.emplace_back(t[i+0]);
+                    vertices.emplace_back(t[i+1]);
+                    vertices.emplace_back(t[i+2]);
+                    mesh.add_face(vertices);
+                }
+            }
+            rex_mesh_free (m);
+            FREE (block.data);
+        }
+    }
+    FREE (buf);
     return true;
 }
 

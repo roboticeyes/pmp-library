@@ -36,6 +36,8 @@ set(IMGUI_SOURCE_DIR "external/imgui")
 set(EIGEN_SOURCE_DIR "external/eigen")
 set(RPLY_SOURCE_DIR "external/rply")
 set(STBI_SOURCE_DIR "external/stb_image")
+set(OPENREX_SOURCE_DIR "external/openrex")
+set(OPENREX_STATIC_BUILD 1)
 
 # setup STB Image
 # (place *before* GLFW since GLFW has an old copy of stb_image_write.h)
@@ -77,6 +79,10 @@ add_subdirectory(${IMGUI_SOURCE_DIR})
 # setup PLY
 include_directories(${RPLY_SOURCE_DIR})
 add_subdirectory(${RPLY_SOURCE_DIR})
+
+# setup OpenREX
+include_directories(${OPENREX_SOURCE_DIR}/src)
+add_subdirectory(${OPENREX_SOURCE_DIR})
 
 # setup Eigen
 include_directories(${EIGEN_SOURCE_DIR})

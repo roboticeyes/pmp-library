@@ -5,7 +5,7 @@ set(HDRS ${HDRS} "../MatVec.h")
 if (EMSCRIPTEN)
 
     add_library(pmp_vis STATIC ${SRCS} ${HDRS})
-    target_link_libraries(pmp_vis stb_image imgui pmp)
+    target_link_libraries(pmp_vis stb_image imgui pmp openrex)
 
 else()
 
@@ -13,7 +13,7 @@ else()
 
     if (OpenGL_FOUND)
         add_library(pmp_vis STATIC ${SRCS} ${HDRS})
-        target_link_libraries(pmp_vis pmp stb_image imgui glfw glew ${OPENGL_LIBRARIES})
+        target_link_libraries(pmp_vis pmp stb_image openrex imgui glfw glew ${OPENGL_LIBRARIES})
         install(TARGETS pmp_vis DESTINATION lib)
         install(FILES ${HDRS} DESTINATION include/pmp/visualization)
     endif()

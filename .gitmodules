@@ -10,3 +10,6 @@
 [submodule "external/eigen"]
 	path = external/eigen
 	url = https://gitlab.com/libeigen/eigen.git
+[submodule "external/openrex"]
+	path = external/openrex
+	url = https://github.com/roboticeyes/openrex
